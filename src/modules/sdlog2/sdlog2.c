@@ -1471,7 +1471,7 @@ int sdlog2_thread_main(int argc, char *argv[])
 					log_msg.body.log_IMU.temp_gyro = buf.sensor.gyro_temp[i * 3 + 0];
 					log_msg.body.log_IMU.temp_acc = buf.sensor.accelerometer_temp[i * 3 + 0];
 					log_msg.body.log_IMU.temp_mag = buf.sensor.magnetometer_temp[i * 3 + 0];
-					LOGBUFFER_WRITE_AND_COUNT(IMUT);
+					LOGBUFFER_WRITE_AND_COUNT(IMU);
 				}
 
 				if (write_SENS) {
