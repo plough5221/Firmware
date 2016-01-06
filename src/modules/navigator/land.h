@@ -1,6 +1,6 @@
-/****************************************************************************
+/***************************************************************************
  *
- *   Copyright (c) 2015 PX4 Development Team. All rights reserved.
+ *   Copyright (c) 2014 PX4 Development Team. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,67 +30,36 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-
 /**
- * @file tiltrotor_params.c
- * Parameters for vtol attitude controller.
+ * @file land.h
  *
- * @author Roman Bapst <roman@px4.io>
+ * Helper class to land at the current position
+ *
+ * @author Andreas Antener <andreas@uaventure.com>
  */
 
-#include <systemlib/param/param.h>
+#ifndef NAVIGATOR_LAND_H
+#define NAVIGATOR_LAND_H
 
-/**
- * Position of tilt servo in mc mode
- *
- * Position of tilt servo in mc mode
- *
- * @min 0.0
- * @max 1
- * @group VTOL Attitude Control
- */
-PARAM_DEFINE_FLOAT(VT_TILT_MC, 0.0f);
+#include <controllib/blocks.hpp>
+#include <controllib/block/BlockParam.hpp>
 
-/**
- * Position of tilt servo in transition mode
- *
- * Position of tilt servo in transition mode
- *
- * @min 0.0
- * @max 1
- * @group VTOL Attitude Control
- */
-PARAM_DEFINE_FLOAT(VT_TILT_TRANS, 0.3f);
+#include "navigator_mode.h"
+#include "mission_block.h"
 
-/**
- * Position of tilt servo in fw mode
- *
- * Position of tilt servo in fw mode
- *
- * @min 0.0
- * @max 1
- * @group VTOL Attitude Control
- */
-PARAM_DEFINE_FLOAT(VT_TILT_FW, 1.0f);
+class Land : public MissionBlock
+{
+public:
+    Land(Navigator *navigator, const char *name);
 
-/**
- * Duration of front transition phase 2
- *
- * Time in seconds it should take for the rotors to rotate forward completely from the point
- * when the plane has picked up enough airspeed and is ready to go into fixed wind mode.
- *
- * @min 0.1
- * @max 2
- * @group VTOL Attitude Control
- */
-PARAM_DEFINE_FLOAT(VT_TRANS_P2_DUR, 0.5f);
+    ~Land();
 
-/**
- * The channel number of motors that must be turned off in fixed wing mode.
- *
- *
- * @min 0
- * @max 12345678
- * @group VTOL Attitude Control
- */
-PARAM_DEFINE_INT32(VT_FW_MOT_OFFID, 0);
+    virtual void on_inactive();
+
+    virtual void on_activation();
+
+    virtual void on_active();
+
+};
+
+#endif
