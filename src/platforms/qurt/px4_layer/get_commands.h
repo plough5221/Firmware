@@ -1,6 +1,5 @@
 /****************************************************************************
- *
- *   Copyright (C) 2015 Mark Charlebois. All rights reserved.
+ * Copyright (C) 2015 Mark Charlebois. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,53 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-#include <stdio.h>
-#include <dlfcn.h>
+/**
+ * @file get_commands.cpp
+ * functions to call to run the set of startup commands
+ *
+ * @author Mark Charlebois <charlebm@gmail.com>
+ */
 
-//#define STACK_SIZE 0x8000
-//static char __attribute__ ((aligned (16))) stack1[STACK_SIZE];
+__BEGIN_DECLS
+// The commands to run are specified in a target file: commands_<target>.c
+extern const char *get_commands(void);
 
-static void do_dlopen()
-{
-#if 0
-	void *handle;
-	char *error;
-	void (*entry_function)() = NULL;
-
-	handle = dlopen("libdspal_client.so", RTLD_LAZY);
-
-	if (!handle) {
-		printf("Error opening libdspal_client.so\n");
-		return 1;
-	}
-
-	entry_function = dlsym(handle, "dspal_entry");
-
-	if (((error = dlerror()) != NULL) || (entry_function == NULL)) {
-		printf("Error dlsym for dspal_entry");
-		ret = 2;
-	}
-
-	dlclose(handle);
-#endif
-}
-
-#ifdef QURT_EXE_BUILD
-int dlinit(int a, char **b)
-{
-	return 0;
-}
-#endif
-
-int main(int argc, char *argv[])
-{
-	int ret = 0;
-	char *builtin[] = {"libgcc.so", "libc.so"};
-
-	printf("In DSPAL main\n");
-	dlinit(2, builtin);
-
-	do_dlopen();
-	return ret;
-}
+// Enable external library hook
+void qurt_external_hook(void) __attribute__((weak));
+__END_DECLS
 
